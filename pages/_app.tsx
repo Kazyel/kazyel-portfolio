@@ -2,13 +2,12 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 
-
-function MyApp({ Component, pageProps }: AppProps) {
-  return( 
-  <ThemeProvider enableSystem={false} attribute="class">
-  <Component {...pageProps} />
-  </ThemeProvider>
-)
+function MyApp({ Component, pageProps, router }: AppProps) {
+  return (
+    <ThemeProvider enableSystem={false} attribute="class">
+      <Component {...pageProps} />
+    </ThemeProvider>
+  )
 }
 
 export default MyApp

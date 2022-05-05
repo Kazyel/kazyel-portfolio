@@ -1,112 +1,115 @@
 import type { NextPage } from 'next'
-import DayMode from '../pages/assets/icons/day-mode.png'
-import NightMode from '../pages/assets/icons/night-mode.png'
 import { useState, useEffect } from 'react'
-import { useTheme } from 'next-themes'
 import Head from 'next/head'
-import Image from 'next/image'
-import { Link } from 'react-scroll'
+import Link from 'next/link'
+import * as Scroll from 'react-scroll'
+import DarkModeButton from './darkmode'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
+import Navbar from './navbar'
 
 const Home: NextPage = () => {
-  const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
+  const x = useMotionValue(0)
+  const opacity = useTransform(x, [-200, 0, 200], [0, 1, 0])
 
-  function changeTheme() { theme === 'dark' ? setTheme('light') : setTheme('dark') }
+  let Links = Scroll.Link
 
   useEffect(() => setMounted(true), [])
-
 
   if (!mounted) return null
 
   return (
-    <div className="">
+    <div>
       <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>Kazyel</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <section id='start' className='flex min-h-screen flex-col items-center justify-center py-2'>
-        <h1 className="text-6xl py-4 selection:bg-violet-900 font-bold">
+      <Navbar></Navbar>
+      <motion.div
+      transition={{ duration: 0.5 }}
+      initial="pageInitial"
+      animate="pageAnimate"
+      variants={{
+        pageInitial: {
+          opacity: 0,
+        },
+        pageAnimate: {
+          opacity: 1,
+        },
+      }}
+    >
+      <section
+        id="start"
+        className="flex min-h-screen flex-col items-center justify-center py-2 selection:bg-violet-900"
+      >
+        <h1 className=" text-4xl md:text-6xl font-bold">
           Yo!{' '}
-          <Link activeClass="active" to="cards" spy={true} smooth={true} duration={1000}> 
-          <a
-            className="text-purple-600 hover:underline"
-            href="#cards"
+          <Links
+            activeClass="active"
+            to="cards"
+            spy={true}
+            smooth={true}
+            duration={1000}
           >
-            I'm Kazyel!
-          </a>
-          </Link>
+            <a
+              href="#cards"
+              className="mateus text-purple-500 hover:underline hover:drop-shadow-md"
+            >
+              <span className="mateuspan">I'm Mateus!</span>
+            </a>
+          </Links>
         </h1>
 
-        <div>
-          <button
-            id="themeBtn"
-            className="ease-in-out delay-200"
-            type="button"
-            onClick={() => changeTheme()}
-          >
-           {theme === 'dark' ? <Image className="dark:invert" src={NightMode}></Image>  :  <Image className="dark:invert" src={DayMode}></Image>}
-          </button>
+        <div className="p-5 text-lg md:text-2xl font-bold text-purple-700 drop-shadow-md duration-300 ease-in-out hover:text-purple-500">
+          <Link href="/testingpage">
+            <a className="hover:underline">I will be a Full Stack Developer!</a>
+          </Link>
         </div>
-      </section>  
-      
-  
-      <section id='cards' className="flex w-full flex-1 flex-col items-center justify-center p-20 text-center"> 
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="ease mt-6 w-96 rounded-xl border p-6 text-left shadow-md transition delay-100 hover:border-purple-600 hover:text-purple-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="ease mt-6 w-96 rounded-xl border p-6 text-left shadow-md transition delay-100 hover:border-purple-600 hover:text-purple-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="ease mt-6 w-96 rounded-xl border p-6 text-left shadow-md transition delay-100 hover:border-purple-600 hover:text-purple-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="ease mt-6 w-96 rounded-xl border p-6 text-left shadow-md transition delay-100 hover:border-purple-600 hover:text-purple-600 "
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className="mb-5 bg-zinc-900 p-2.5 selection:bg-zinc-700 dark:selection:bg-zinc-800">
+          <code className="text-white dark:text-white">
+            Learning{' '}
+            <span className="font-black text-yellow-400">JavaScript</span> at
+            the moment!
+          </code>
         </div>
       </section>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <section
+        id="cards"
+        className="flex w-full flex-1 flex-col items-center justify-center p-20 text-center"
+      ></section>
+      <section
+        id="cards"
+        className="flex w-full flex-1 flex-col items-center justify-center p-20 text-center"
+      ></section>{' '}
+      <section
+        id="cards"
+        className="flex w-full flex-1 flex-col items-center justify-center p-20 text-center"
+      ></section>{' '}
+      <section
+        id="cards"
+        className="flex w-full flex-1 flex-col items-center justify-center p-20 text-center"
+      ></section>{' '}
+      <section
+        id="cards"
+        className="flex w-full flex-1 flex-col items-center justify-center p-20 text-center"
+      ></section>
+      <footer className="flex h-24 w-full items-center justify-center">
+        <motion.div
+          whileTap={{ scale: 2 }}
+          drag="x"
+          style={{ x, opacity }}
+          dragConstraints={{ left: -50, right: 50 }}
+          transition={{ duration: 2 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
         >
-          Powered by{' '}
-          <Image className="dark:invert" src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
+          <span className="text-2xl font-bold text-purple-600">Foda-se?</span>
+        </motion.div>
       </footer>
+      </motion.div>
     </div>
   )
 }
